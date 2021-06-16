@@ -17,7 +17,12 @@ var generators={
 		'added':'2021-06-16',
 		'year': 1994,
 		'platform':'snes',
-		'gameinfo':'https://www.mobygames.com/game/snes/adventures-of-batman-robin__'
+		'gameinfo':'https://www.mobygames.com/game/snes/adventures-of-batman-robin__',
+		'contributions':[{
+			'type':'accent design',
+			'contributor': 'Reese Rivers',
+			'url' :'https://twitter.com/ReeseTheRivers',
+		}],
 	},
 	'af2':{
 		'title': 'Aero Fighters 2',
@@ -1923,6 +1928,7 @@ var generators={
 			'url':'https://twitter.com/pixel_data',
 		},
 		{
+			'type': 'accent design',
 			'contributor': 'Reese Rivers',
 			'url':'https://twitter.com/ReeseTheRivers'
 	}],
