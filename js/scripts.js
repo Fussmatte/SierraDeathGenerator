@@ -222,6 +222,7 @@ class Snippet{
 		// FIXME: can doing uppercase/lowercase break astral codepoints?
 		var line = this.text
 		if(font['case-fold'] == 'upper'){
+			line = line.replace(/ß/g, 'ẞ')
 			line = line.toUpperCase()
 		}else if(font['case-fold'] == 'lower'){
 			line = line.toLowerCase()
