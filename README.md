@@ -22,4 +22,4 @@ Software credits
 
 Fork details
 =============================
-Fork by (Reese Rivers)[https://twitter.com/ReeseTheRivers]. Adds accented characters for (mainly) Spanish, German and Esperanto to some generators.
+Fork by [Reese Rivers](https://twitter.com/ReeseTheRivers). Adds accented characters for (mainly) Spanish, German and Esperanto to some generators.
