@@ -1921,7 +1921,11 @@ var generators={
 		'contributions':[{
 			'contributor': '@pixel_data',
 			'url':'https://twitter.com/pixel_data',
-		}],
+		},
+		{
+			'contributor': 'Reese Rivers',
+			'url':'https://twitter.com/ReeseTheRivers'
+	}],
 		'series':'mario',
 		'platform':'nes',
 		'year':1985,
