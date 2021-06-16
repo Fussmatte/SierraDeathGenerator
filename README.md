@@ -19,3 +19,7 @@ Software credits
 * [jQuery waitForImages plugin](https://github.com/alexanderdickson/waitForImages)
 * [linebreak](https://github.com/devongovett/linebreak)
 * [jsgif](https://github.com/antimatter15/jsgif)
+
+Fork details
+=============================
+Fork by (Reese Rivers)[https://twitter.com/ReeseTheRivers]. Adds accented characters for (mainly) Spanish, German and Esperanto to some generators.
