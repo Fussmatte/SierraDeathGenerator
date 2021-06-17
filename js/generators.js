@@ -660,6 +660,11 @@ var generators={
 		'year':1993,
 		'gameinfo':'https://www.mobygames.com/game/snes/family-feud_',
 		'added':'2020-09-25',
+		'contributions':[{
+			'type':'accent design',
+			'contributor': 'Reese Rivers',
+			'url' :'https://twitter.com/ReeseTheRivers',
+		}],
 	},
 	'fatalfuryspecial':{
 		'title': 'Fatal Fury Special',
