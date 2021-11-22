@@ -19,6 +19,17 @@ var generators={
 		'platform':'snes',
 		'gameinfo':'https://www.mobygames.com/game/snes/adventures-of-batman-robin__'
 	},
+	'af1':{
+		'title': 'Aero Fighters',
+		'source':'Video System',
+		'sourceurl':'https://en.wikipedia.org/wiki/Aero_Fighters',
+		'defaulttext':"Your mission:\nDestroy the secret weapons of the dictator.",
+		'added':'2021-11-12',
+		'platform':'arcade',
+		'year':1992,
+		'gameinfo':'https://www.mobygames.com/game/aero-fighters',
+		'series':'aero fighters'
+	},
 	'af2':{
 		'title': 'Aero Fighters 2',
 		'source':'Video System',
@@ -115,6 +126,16 @@ var generators={
 		'platform':'atari8bit',
 		'added':'2019-06-12',
 		'gameinfo':'https://en.wikipedia.org/wiki/Atari_8-bit_family',
+	},
+	'babyjo':{
+		'title': 'Baby Jo',
+		'source':'Loriciel',
+		'sourceurl':'https://en.wikipedia.org/wiki/Loriciel',
+		'defaulttext':"     Here's some\n  advice : find the\n     signs of the\n Hidden Treasures",
+		'platform':'dos',
+		'gameinfo':'https://www.mobygames.com/game/baby-jo-in-going-home',
+		'year':1991,
+		'added':'2021-07-07',
 	},
 	'baddudes':{
 		'title': 'Bad Dudes',
@@ -339,11 +360,16 @@ var generators={
 				'type':'Bernie Sanders theme',
 				'contributor': 'A_Rival, aka DJ iPad',
 				'url': 'https://twitter.com/8bitpimp'
+			},
+			{
+				'type':'Nacho Libre theme',
+				'contributor': 'JLuis',
+				'url': 'https://twitter.com/jluisestrada'
 			}
 		],
 		'platform':'ps1',
 		'added':'2018-02-23',
-		'updated':'2021-02-09',
+		'updated':'2021-11-04',
 		'series':'castlevania',
 		'gameinfo':'https://www.mobygames.com/game/castlevania-symphony-of-the-night',
 		'year':1997
@@ -457,6 +483,16 @@ var generators={
 		'gameinfo':'https://www.mobygames.com/game/contra-hard-corps',
 		'added':'2020-03-14'
 	},
+	'coolspot':{
+		'title': 'Cool Spot',
+		'source':'Virgin Interactive',
+		'sourceurl':'https://en.wikipedia.org/wiki/Virgin_Interactive',
+		'defaulttext':"Pier\nPressure",
+		'platform':'snes',
+		'year':1993,
+		'gameinfo':'https://www.mobygames.com/game/snes/cool-spot',
+		'added':'2021-10-20'
+	},
 	'cosmo':{
 		'title': 'Cosmo\'s Cosmic Adventure',
 		'source':'Apogee Software',
@@ -467,6 +503,17 @@ var generators={
 		'year':1992,
 		'gameinfo':'https://www.mobygames.com/game/cosmos-cosmic-adventure',
 		'added':'2018-04-22',
+
+	},
+	'crazycross':{
+		'title': 'Crazy Cross',
+		'source':'Konami',
+		'sourceurl':'https://en.wikipedia.org/wiki/Konami',
+		'defaulttext':"",
+		'platform':'arcade',
+		'year':1994,
+		'gameinfo':'https://konami.fandom.com/wiki/Crazy_Cross',
+		'added':'2021-10-10',
 
 	},
 	'crowtel':{
@@ -626,6 +673,16 @@ var generators={
 		'gameinfo':'https://en.wikipedia.org/wiki/MS-DOS_Editor',
 		'added':'2018-04-15',
 	},
+	'elvira':{
+		'title': 'Elvira',
+		'source':'Horror Soft',
+		'sourceurl':'https://en.wikipedia.org/wiki/Adventure_Soft',
+		'defaulttext':"\"You're lucky he didn't tie\nyour weeny in a granny knot.\"",
+		'platform':'dos',
+		'year':1990,
+		'gameinfo':'https://www.mobygames.com/game/elvira',
+		'added':'2021-09-23',
+	},
 	'ed':{
 		'title': 'Emerald Dragon',
 		'source':'Alfa System',
@@ -686,6 +743,17 @@ var generators={
 		'platform':'gameboy',
 		'added':'2019-02-13',
 		'gameinfo':'https://www.mobygames.com/game/kaeru-no-tame-ni-kane-wa-naru',
+	},
+	'ff5':{
+		'title': 'Final Fantasy V',
+		'source':'Square',
+		'sourceurl':'https://en.wikipedia.org/wiki/Square_Enix',
+		'defaulttext':"Bartz: Sweet Christmas,\nIt's a talking turtle!",
+		'year':2006,
+		'platform':'snes',
+		'series':'final fantasy',
+		'added':'2021-07-23',
+		'gameinfo':'https://www.mobygames.com/game/final-fantasy-v-advance',
 	},
 	'ff6':{
 		'title': 'Final Fantasy VI',
@@ -794,6 +862,16 @@ var generators={
 		'added':'2020-04-17',
 		'gameinfo':'https://www.mobygames.com/game/super-solvers-gizmos-gadgets'
 	},
+	'goku2':{
+		'title': 'Dragon Ball Z: The Legacy of Goku II',
+		'source':'Webfoot Technologies',
+		'sourceurl':'https://en.wikipedia.org/wiki/Webfoot_Technologies',
+		'year':2003,
+		'platform':'gba',
+		'defaulttext':"GOKU: We're here!  Hey, looks like there's a parade today!",
+		'added':'2021-11-06',
+		'gameinfo':'https://www.mobygames.com/game/dragon-ball-z-the-legacy-of-goku-ii'
+	},
 	'got':{
 		'title': 'God of Thunder',
 		'source':'Adept Software',
@@ -890,6 +968,16 @@ var generators={
 		'added':'2020-03-18',
 		'gameinfo':'https://www.mobygames.com/game/jojos-bizarre-adventure'
 	},
+	'jp':{
+		'title': "Jurassic Park",
+		'source':'Ocean Software',
+		'sourceurl':'https://en.wikipedia.org/wiki/Ocean_Software',
+		'defaulttext':"BIOS Load..\n\nMessage\n\nError-\nMain system down.\n\nAction-\nTurn on generator.\nBefore trying to\nreboot system\n\n\nMessage ends...",
+		'platform':'snes',
+		'year':1993,
+		'added':'2021-07-09',
+		'gameinfo':'https://www.mobygames.com/game/jurassic-park____'
+	},
 	'karnovr':{
 		'title': "Karnov's Revenge",
 		'source':'Data East',
@@ -971,11 +1059,12 @@ var generators={
 		'title': 'Kirby\'s Adventure',
 		'source':'HAL Laboratory',
 		'sourceurl':'https://en.wikipedia.org/wiki/HAL_Laboratory',
-		'defaulttext':'[red]      Normal[/]\nHit the Down Arrow\nwhen Kirby has an\nenemy in his mouth\nto copy the enemy\'s\nspecial ability!',
+		'defaulttext':'Normal\nHit the Down Arrow\nwhen Kirby has an\nenemy in his mouth\nto copy the enemy\'s\nspecial ability!',
 		'platform':'nes',
 		'series':'kirby',
 		'year':1993,
 		'added':'2019-01-11',
+		'updated':'2021-11-15',
 		'gameinfo':'https://www.mobygames.com/game/kirbys-adventure'
 	},
 	'kkfeoe':{
@@ -1065,6 +1154,16 @@ var generators={
 		'gameinfo':'https://ia800903.us.archive.org/6/items/LetsLearnAboutComputers4amCrack/Let%27s%20Learn%20About%20Computers%20%284am%20crack%29.txt',
 		'added':'2020-09-19',
 		'play':'https://archive.org/details/LetsLearnAboutComputers4amCrack'
+	},
+	'lm':{
+		'title': 'La-Mulana',
+		'source':'NIGORO',
+		'sourceurl':'http://nigoro.jp/en/about/',
+		'defaulttext':"These ruins are full of traps. I no longer have the energy to escape…",
+		'platform':'win32',
+		'year':2005,
+		'gameinfo':'https://www.mobygames.com/game/la-mulana',
+		'added':'2021-11-21'
 	},
 	'ln':{
 		'title': 'Little Nemo',
@@ -1168,6 +1267,16 @@ var generators={
 		'added':'2018-05-31',
 
 	},
+	'mckids':{
+		'title': 'M.C. Kids',
+		'source':'Virgin Games',
+		'sourceurl':'https://en.wikipedia.org/wiki/Virgin_Interactive',
+		'defaulttext':"Ronald was showing off his Magic Bag at a picnic in the Meadow, when all of a sudden...",
+		'platform':'nes',
+		'year':1992,
+		'gameinfo':'https://www.mobygames.com/game/nes/mc-kids',
+		'added':'2021-10-02',
+	},
 	'mm2':{
 		'title': 'Mega Man 2',
 		'source':'Capcom',
@@ -1232,6 +1341,7 @@ var generators={
 		'year':1986,
 		'gameinfo':'https://www.mobygames.com/game/metroid',
 		'added':'2018-04-10',
+		'updated':'2021-11-19',
 		'series':'metroid',
 	},
 	'mmprtm':{
@@ -1328,6 +1438,16 @@ var generators={
 		'added':'2018-04-11',
 
 	},
+	'mlprr':{
+		'title': 'My Little Pony: Crystal Princess - The Runaway Rainbow',
+		'source':'Webfoot Technologies',
+		'sourceurl':'https://en.wikipedia.org/wiki/Webfoot_Technologies',
+		'defaulttext':'[hotpink]Cheerilee:[/] Rarity?  Are you listening?',
+		'platform':'gba',
+		'year':2006,
+		'gameinfo':'https://www.mobygames.com/game/my-little-pony-crystal-princess-the-runaway-rainbow',
+		'added':'2021-11-06'
+	},
 	'nesticle':{
 		'title': 'Nesticle',
 		'source':'Bloodlust Software',
@@ -1414,6 +1534,16 @@ var generators={
 		'series':'pac-man',
 		'added':'2020-09-29'
 	},
+	'pb2':{
+		'title': "Paperboy 2",
+		'source':'Tengen',
+		'sourceurl':'https://en.wikipedia.org/wiki/Tengen_(company)',
+		'defaulttext':"Monday\nPlayer 1\nBroken Panes Puzzle Police",
+		'platform':'snes',
+		'year':1991,
+		'gameinfo':'https://www.mobygames.com/game/snes/paperboy-2',
+		'added':'2021-09-08',
+	},
 	'phdq':{
 		'title': "Paris Hilton's Diamond Quest",
 		'source':'Gameloft',
@@ -1478,6 +1608,16 @@ var generators={
 		'added':'2018-12-18',
 		'series':'police quest'
 	},
+	'pieces':{
+		'title': 'Pieces',
+		'source':'Prism Kikaku Ltd',
+		'sourceurl':'https://en.wikipedia.org/wiki/Nippon_Ichi_Software',
+		'defaulttext':"      RICE BOWL CRAB\nI'll be your first opponent!\nI have huge eyes, so I'm\npretty accurate. Now, if I\ncould only walk straight...",
+		'platform':'snes',
+		'year':1994,
+		'gameinfo':'https://www.mobygames.com/game/snes/pieces',
+		'added':'2021-08-26'
+	},
 	'pw':{
 		'title': 'Pilotwings',
 		'source':'Nintendo',
@@ -1510,6 +1650,16 @@ var generators={
 		'gameinfo':'https://www.mobygames.com/game/addams-family-pugsleys-scavenger-hunt',
 		'added':'2018-06-15',
 
+	},
+	"quake":{
+		'title': 'Quake',
+		'source':'id Software',
+		'sourceurl':'https://en.wikipedia.org/wiki/Id_Software',
+		'defaulttext':"disabled.  Use \"-nocdaudio\" if you wish to avoid this message in the future.  See README.TXT for help.\nPress a key.\n―\n\n3-button mouse available\n\njoystick found\nCENTER the joystick\nand press button 1 (ESC to skip):\naborted.\nexecing quake.rc\nexecing default.cfg\nexecing config.cfg\ncouldn't exec autoexec.cfg\n3 demo(s) in loop\nPlaying demo from demo1.dem.\n\n\n―\n\n[red]the Necropolis[/]\n]",
+		'platform':'dos',
+		'year':1996,
+		'gameinfo':'https://www.mobygames.com/game/quake',
+		'added':'2020-06-23',
 	},
 	"raid2020":{
 		'title': 'Raid 2020',
@@ -1544,6 +1694,17 @@ var generators={
 		'added':'2020-09-26',
 		'series':'rambo'
 	},
+	"rightagain":{
+		'title': 'Right Again',
+		'source':'Ascension Designs',
+		'sourceurl':'https://www.mobygames.com/company/ascension-designs-inc',
+		'defaulttext':"Hannah says -\n\nMy grandfather used\nto talk about that.",
+		'platform':'apple2',
+		'year':1984,
+		'gameinfo':'https://www.mobygames.com/game/apple2/right-again',
+		'added':'2021-07-11',
+		'play':'https://archive.org/details/a2_Right_Again_1984_Ascension_Designs'
+	},
 	"rr":{
 		'title': 'Road Rash',
 		'source':'Electronic Arts',
@@ -1565,6 +1726,16 @@ var generators={
 		'gameinfo':'https://www.mobygames.com/game/robocop__',
 		'added':'2020-06-17'
 	},
+	"robocop3":{
+		'title': 'RoboCop 3',
+		'source':'Digital Image Design',
+		'sourceurl':'https://en.wikipedia.org/wiki/Digital_Image_Design',
+		'defaulttext':"This is MEDIABREAK Give us two minutes and we'll\ngive you the WORLD!",
+		'platform':'dos',
+		'year':1992,
+		'gameinfo':'https://www.mobygames.com/game/dos/robocop-3_',
+		'added':'2021-09-06'
+	},
 	"rygar":{
 		'title': 'Rygar',
 		'source':'Tecmo',
@@ -1574,6 +1745,17 @@ var generators={
 		'year':1987,
 		'gameinfo':'https://www.mobygames.com/game/nes/rygar',
 		'added':'2018-05-09',
+	},
+	'sam':{
+		'title': 'Secret Agent',
+		'source':'Apogee Software',
+		'sourceurl':'https://en.wikipedia.org/wiki/3D_Realms',
+		'defaulttext':"Robotic Enemies          Pg. 11\n―\n\n:hardbot: \n   This robot is difficult to\n   destroy and fires at you.\n\n\n:halfbot: This half man-half robot\n   has only one weakness.\n\n\n\n:dogbot: This robot dog is not\n     man's best friend.\n―\nPress PgUp-PgDn        Esc-Exit",
+		'platform': 'dos',
+		'year':1992,
+		'added':'2021-07-02',
+		'gameinfo':'https://www.mobygames.com/game/secret-agent',
+		'play':'https://archive.org/details/msdos_Secret_Agent_1992'
 	},
 	'scnes':{
 		'title': 'SimCity NES',
@@ -1598,6 +1780,17 @@ var generators={
 		'added':'2017-12-18',
 		'updated':'2019-02-23',
 		'series':'simcity'
+	},
+	'simearth':{
+		'title': 'SimEarth',
+		'source':'Maxis Software',
+		'sourceurl':'https://en.wikipedia.org/wiki/Maxis',
+		'defaulttext':"\nAmphibians\nAre Now Sentient.",
+		'play':"https://archive.org/details/msdos_SimEarth_-_The_Living_Planet_1990",
+		'platform':'dos',
+		'year':1990,
+		'gameinfo':'https://www.mobygames.com/game/simearth-the-living-planet',
+		'added':'2021-11-13'
 	},
 	'simrefinery':{
 		'title': 'SimRefinery',
@@ -1701,6 +1894,17 @@ var generators={
 		'gameinfo':'https://www.mobygames.com/game/genesis/sonic-the-hedgehog-2',
 		'added':'2018-10-31'
 	},
+	'sth2i':{
+		'title': 'Sonic The Hedgehog 2 Intro/Credits',
+		'source':'Sega',
+		'sourceurl':'https://en.wikipedia.org/wiki/SEGA',
+		'defaulttext':"Sonic \n\n\nand\n\n\nMiles \"Tails\" Prower\n\n\nIn ",
+		'platform':'genesis',
+		'series':'sonic',
+		'year':1992,
+		'gameinfo':'https://www.mobygames.com/game/genesis/sonic-the-hedgehog-2',
+		'added':'2021-08-28'
+	},
 	'soulb':{
 		'title': 'Soul Blazer',
 		'source':'Quintet',
@@ -1789,6 +1993,16 @@ var generators={
 		'gameinfo':'https://www.mobygames.com/game/space-quest-iv-roger-wilco-and-the-time-rippers',
 		'added':'2018-03-08',
 		"series":"space quest"
+	},
+	'stan':{
+		'title': 'Stanley: The Search for Dr. Livingston',
+		'source':'Sculptured Software',
+		'sourceurl':'https://en.wikipedia.org/wiki/List_of_Acclaim_Entertainment_subsidiaries#Acclaim_Studios_Salt_Lake_City',
+		'defaulttext':"The ship\nsails\nwith or\nwithout\nyou\nStanley",
+		'platform':'nes',
+		'year':1991,
+		'gameinfo':'https://www.mobygames.com/game/stanley-the-search-for-dr-livingston',
+		'added':'2021-07-23',
 	},
 	'sv':{
 		'title': 'Stardew Valley',
@@ -2039,6 +2253,16 @@ var generators={
 		'added':'2018-06-16',
 		'series':'system shock'
 	},
+	'tb':{
+		'title': 'Tecmo Bowl',
+		'source':'Tecmo',
+		'sourceurl':'https://en.wikipedia.org/wiki/Tecmo',
+		'defaulttext':"Marcus Allen\ntouchdown!",
+		'platform':'nes',
+		'year':1989,
+		'gameinfo':'https://www.mobygames.com/game/tecmo-bowl',
+		'added':'2021-10-09'
+	},
 	'themehospital':{
 		'title': 'Theme Hospital',
 		'source':'Bullfrog Productions',
@@ -2198,6 +2422,16 @@ var generators={
 		'added':'2020-09-13',
 		'gameinfo':'https://www.mobygames.com/game/nes/warios-woods'
 	},
+	'twtr': {
+		'title': 'The Wild Thornberrys: Rambler',
+		'source': 'Vicarious Visions',
+		'sourceurl': 'https://en.wikipedia.org/wiki/Vicarious_Visions',
+		'platform':'gameboy',
+		'defaulttext': "It's the award given\nfor the Greatest\nNature Documentary Ever in the History of the World. Duh!",
+		'year':2000,
+		'added':'2021-09-14',
+		'gameinfo':'https://www.mobygames.com/game/wild-thornberrys-rambler_'
+	},
 	'win95': {
 		'title': 'Win95 Tips',
 		'source': 'Microsoft',
@@ -2261,6 +2495,16 @@ var generators={
 		'year':1990,
 		'gameinfo':'https://www.mobygames.com/game/nes/wrath-of-the-black-manta',
 		'added':'2018-04-20',
+	},
+	'xmen':{
+		'title': 'X-Men: Mutant Wars',
+		'source':'HAL Corporation',
+		'sourceurl':'https://www.mobygames.com/company/hal-corporation',
+		'defaulttext':"Our Cerebro computer has detected cyborgs rampaging through Canada.",
+		'platform':'gameboy',
+		'year':2002,
+		'gameinfo':'https://www.mobygames.com/game/gameboy-color/x-men-mutant-wars',
+		'added':'2021-10-07'
 	},
 	'yi':{
 		'title': "Yoshi's Island",

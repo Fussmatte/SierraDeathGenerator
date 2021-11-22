@@ -121,19 +121,23 @@ class LineGroup{
 					var parts = snippet.split(maxwidth-x)
 					for(var p of parts){
 						var lg = new LineGroup(first)
-						first=false
-						lg.add(p)
-						out.push(lg)
+						if(!p.isEmpty()){
+							first=false
+							lg.add(p)
+							out.push(lg)
+						}
 					}
 					
 					// TODO: rest of snippets?
 					return out
 				}else{
 					x+=w
-					var lg = new LineGroup(first)
-					lg.add(snippet)
-					out.push(snippet)
-					first=false
+					if(!snippet.isEmpty()){
+						var lg = new LineGroup(first)
+						lg.add(snippet)
+						out.push(snippet)
+						first=false
+					}
 				}
 			}
 			return out
@@ -203,14 +207,29 @@ class Snippet{
 		var x=xStart
 		var last = 0
 		var lastchar = -1 
+		var slope_offset = this.font.info.slope_offset
 		for(let char of this.parse()){
 			if(lastchar in char['unadvance-after']){
 				x-= char['unadvance-after'][lastchar]
 			}
-			context.drawImage(this.font.image,char.x,char.y,char.w,char.h,x*scale,y*scale + char['vertical-shift'],char.w*scale,char.h*scale)
-			x+=(char.w - char.unadvance)
-			last = char.unadvance
-			lastchar = char.char
+			var minfo={'x':x,'y':y,'char':char,'scale':scale}
+			if(slope_offset){
+				slope_offset(minfo)
+			}
+			context.drawImage(
+				this.font.image,
+				minfo.char.x,
+				minfo.char.y,
+				minfo.char.w,
+				minfo.char.h,
+				minfo.x*minfo.scale,
+				minfo.y*minfo.scale + minfo.char['vertical-shift'],
+				minfo.char.w*minfo.scale,
+				minfo.char.h*minfo.scale
+			)
+			x=minfo.x+(minfo.char.w - minfo.char.unadvance)
+			last = minfo.char.unadvance
+			lastchar = minfo.char.char
 		}
 		return x + last
 	}
@@ -228,6 +247,7 @@ class Snippet{
 			line = line.toLowerCase()
 		}
 		var ligatures = first(font.ligatures, {})
+		Object.assign(ligatures, first(font.insertables, {}))
 		
 		for(var i=0;i<line.length;i++){
 			var c=line.charCodeAt(i)
@@ -243,34 +263,41 @@ class Snippet{
 				}
 			}
 			var lig_unadvance = undefined
+			var ligature_default = {}
 			var matching_ligatures = Object.keys(ligatures).filter(x=>line.substring(i,i+x.length)==x)
 			if(matching_ligatures.length>0){
 				// Pick the longest match if there are multiple matches
 				matching_ligatures.sort((a,b) => b.length - a.length)
-				var old_info = info
-				info = ligatures[matching_ligatures[0]]
-				var lig_chain = first(info['ligature-chain'], defaultInfo['ligature-chain'], 0)
-				if(lig_chain>0){
-					// FIXME: This won't calculate the correct unadvance if the chain is >1! 
-					lig_unadvance = first(info.unadvance, defaultInfo.unadvance, 0) + first(old_info.w, defaultInfo.w) - 1 
+				var matched_text = matching_ligatures[0]
+				if(matched_text != 'default'){ // You can't have a ligature on the word default!
+					ligature_default = first(first(font.ligatures,font.insertables, {}).default,{})
+					var old_info = info
+					info = ligatures[matched_text]
+					var lig_chain = first(info['ligature-chain'], defaultInfo['ligature-chain'], 0)
+					if(lig_chain>0){
+						// FIXME: This won't calculate the correct unadvance if the chain is >1! 
+						lig_unadvance = first(info.unadvance, defaultInfo.unadvance, 0) + first(old_info.w, defaultInfo.w) - 1 
+					}
+					// Extend i by the length of the ligature, minus 1 since the for loop will do i++
+					i+= Math.max(0, (matching_ligatures[0].length -1 ) - lig_chain) 
 				}
-				// Extend i by the length of the ligature, minus 1 since the for loop will do i++
-				i+= Math.max(0, (matching_ligatures[0].length -1 ) - lig_chain) 
 			}
-			var x=first(info.x, defaultInfo.x)
+			var x=first(info.x, ligature_default.x, defaultInfo.x)
 			if(glitch){
 				x*=0.95
 			}
-			out.push({
+			var char_info={
 				'x': x,
-				'y': first(info.y, defaultInfo.y, fontOriginY),
-				'w': first(info.w, defaultInfo.w),
-				'h': first(info.h, defaultInfo.h),
-				'unadvance': first(lig_unadvance, info.unadvance, defaultInfo.unadvance, 0),
-				'unadvance-after': first(info['unadvance-after'],{}),
-				'vertical-shift': first(info['vertical-shift'], 0),
+				'y': first(info.y, ligature_default.y, defaultInfo.y, fontOriginY),
+				'w': first(info.w, ligature_default.w, defaultInfo.w),
+				'h': first(info.h, ligature_default.h, defaultInfo.h),
+				'unadvance': first(lig_unadvance, ligature_default.unadvance, info.unadvance, defaultInfo.unadvance, 0),
+				'unadvance-after': first(info['unadvance-after'],ligature_default['unadvance-after'], {}),
+				'vertical-shift': first(info['vertical-shift'], ligature_default['vertical-shift'], 0),
 				'char':c
-			})
+			}
+
+			out.push(char_info)
 		}
 		return out
 	}
@@ -298,7 +325,9 @@ class Snippet{
 			return first(info['height'],fontInfo['height'])
 		}
 	}
-
+	isEmpty(){
+		return this.text.length == 0
+	}
 }
 
 class FontManager{
@@ -307,6 +336,7 @@ class FontManager{
 		this.text = text
 		this.fonts = fonts
 		this.lines = this.applyMarkup()
+		//console.log(this.lines)
 	}
 
 	subset(other_text) {
@@ -399,7 +429,7 @@ class FontManager{
 		return width
 	}
 
-	draw(mainFont, scale, originx, justify, justifyresolution, fontOriginY, first_line_justify, first_line_origin, explicit_origins, output_size){
+	draw(mainFont, scale, originx, justify, justifyresolution, fontOriginY, first_line_justify, explicit_origins, output_size){
 		var y = mainFont.y
 		if(['v-center','all-center'].includes(justify)){
 			y -= Math.floor(this.getHeight()/2)
@@ -412,8 +442,7 @@ class FontManager{
 				originx = x = first(origin_override['x'], originx)
 				y = first(origin_override['y'], y)
 			}
-			if(line_number==0 && !origin_override){
-				x = first_line_origin
+			if(line_number==0){
 				if(first_line_justify == 'output-center'){
 					x = Math.floor(output_size.w/2) - Math.floor(line.getWidth()/2);
 					x = (x - (x % justifyresolution))
@@ -423,13 +452,15 @@ class FontManager{
 					x = (x - (x % justifyresolution))
 				}
 			}
-			if(['center','all-center'].includes(justify)){
-				var jadjust = Math.floor(line.getWidth()/2);
-				x = originx - (jadjust - (jadjust % justifyresolution));
-			}
-			if(justify=='right'){
-				var jadjust = line.getWidth();
-				x = originx - (jadjust - (jadjust % justifyresolution));
+			if(line_number!=0 || first_line_justify==justify){
+				if(['center','all-center'].includes(justify)){
+					var jadjust = Math.floor(line.getWidth()/2);
+					x = originx - (jadjust - (jadjust % justifyresolution));
+				}
+				if(justify=='right'){
+					var jadjust = line.getWidth();
+					x = originx - (jadjust - (jadjust % justifyresolution));
+				}
 			}
 			line.draw(this.context, scale, x, y)
 			y+=line.getHeight()
@@ -600,7 +631,7 @@ function selectGenerator(){
 	debugAlertsDiv.text('')
 	if(debugModeActive()){
 		addDebugAlerts(gen, debugAlertsDiv)
-		$('#jsondump').show()
+		$('.debug-only').show()
 	}
 
 
@@ -645,7 +676,8 @@ function parseOverlays(fontInfo){
 					"type":"slider",
 					"min":currentOverlay.min,
 					"max":currentOverlay.max,
-					"value":$('#overlay-'+oname).val()
+					"value":$('#overlay-'+oname).val(),
+					"step":currentOverlay.step
 				}
 			}else{
 				var sname = $('#overlay-'+oname+' option:selected').val()
@@ -732,21 +764,25 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	var fonts={
 		'main': mainFont
 	}
+	var parent_fonts = [fontInfo]
 	if('subfonts' in fontInfo){
 		for(var key of Object.keys(fontInfo.subfonts)){
 			fonts[key] = new BitmapFont(fontInfo.subfonts[key], fontImage)
+			parent_fonts.push(fontInfo.subfonts[key])
 		}
 	}
-	if('shiftfonts' in fontInfo){
-		for(var key of Object.keys(fontInfo.shiftfonts)){
-			// Make a local clone of the JSON tree
-			var fontcopy = JSON.parse(JSON.stringify(fontInfo))
-			if(!'default' in fontcopy){
-				fontcopy['default'] = {}
+	for(const parent_font of parent_fonts){
+		if('shiftfonts' in parent_font){
+			for(var key of Object.keys(parent_font.shiftfonts)){
+				// Make a local clone of the JSON tree
+				var fontcopy = JSON.parse(JSON.stringify(parent_font))
+				if(!('default' in fontcopy)){
+					fontcopy['default'] = {}
+				}
+				fontcopy['default']['y'] = parent_font.shiftfonts[key]
+				delete fontcopy['height'] // Allow changes to the main object to be reflected into the subfont
+				fonts[key] = new BitmapFont(fontcopy, fontImage)
 			}
-			fontcopy['default']['y'] = fontInfo.shiftfonts[key]
-			delete fontcopy['height'] // Allow changes to the main object to be reflected into the subfont
-			fonts[key] = new BitmapFont(fontcopy, fontImage)
 		}
 	}
 	var originx = first(fontInfo.origin.x, 0)
@@ -762,10 +798,15 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	if('hooks' in fontInfo && 'font' in fontInfo['hooks']){
 		eval(fontInfo.hooks.font)
 	}
+	
+	if('slope-offset' in fontInfo){
+		fontInfo.slope_offset=eval('['+fontInfo['slope-offset']+']')[0]
+	}
 
 	var fontManager = new FontManager(context, rawtext, fonts)
 	if('wrap-width' in fontInfo && $('#wordwrap').prop('checked')){
 		fontManager.wordwrap(fontInfo['wrap-width'])
+		//console.log(fontManager.lines)
 	}
 
 	if(wordwrap_dryrun){
@@ -775,9 +816,7 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	var justify = first(fontInfo.justify, 'left')
 	var justify_resolution = first(fontInfo['justify-resolution'],1)
 	var first_line_justify = first(fontInfo['first-line-justify'], justify)
-	var first_line_origin = fontInfo['first-line-origin']
 
-	// TODO: Retire first_line_origin as explicit-origins can do everything it can and more
 	var explicit_origins = fontInfo['explicit-origins']
 
 	var textbox={
@@ -886,15 +925,13 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 
 	drawOverlays('pre-text')
 
-
 	var fontOriginY=0
 
 	if('hooks' in fontInfo && 'pre-text' in fontInfo['hooks']){
 		// EVAL IS SAFE CODE, YES?
 		eval(fontInfo['hooks']['pre-text'])
 	}
-	first_line_origin = first(first_line_origin, originx)
-	fontManager.draw(mainFont, scale, originx, justify, justify_resolution, fontOriginY, first_line_justify, first_line_origin, explicit_origins, outputSize)
+	fontManager.draw(mainFont, scale, originx, justify, justify_resolution, fontOriginY, first_line_justify, explicit_origins, outputSize)
 
 	drawOverlays('post-text')
 }
@@ -995,6 +1032,7 @@ function resetOverlays(){
 					var range = $('<input type="range">').attr('id','overlay-'+key)
 					range.attr('min',first(overlay.min,0))
 					range.attr('max',first(overlay.max,100))
+					range.attr('step',first(overlay.step,1))
 					if(overlay.default){
 						range.attr('value',overlay.default)
 					}
@@ -1064,12 +1102,12 @@ function loadJSONForGenerator(){
 		}else{
 			$('#notes').text('')
 		}
-		addLinksForSpecialCharacters()
+		addLinksForSpecialCharactersAndInsertables()
 	})
 
 }
 
-function addLinksForSpecialCharacters(){
+function addLinksForSpecialCharactersAndInsertables(){
 	var specials = [] 
 	Object.keys(fontInfo).forEach(function (key) {
 		if($.isNumeric(key)){
@@ -1093,6 +1131,40 @@ function addLinksForSpecialCharacters(){
 			var sourcetext = $('#sourcetext')
 			var before_text = sourcetext.val()
 			var to_insert = String.fromCodePoint($(this).data('character'))
+			var caret_pos = sourcetext[0].selectionStart
+			if (typeof caret_pos === 'number') {
+				if (!sourcetext_focused) {
+					caret_pos = before_text.length
+				}
+				sourcetext.val(before_text.substring(0, caret_pos) + to_insert + before_text.substring(caret_pos))
+				sourcetext.focus()
+				sourcetext[0].selectionStart = sourcetext[0].selectionEnd = caret_pos + to_insert.length
+			} else {
+				sourcetext.val(before_text + to_insert)
+			}
+			renderText()
+			return false
+		})
+	}
+	var insertables = Object.keys(first(fontInfo.insertables,{})).filter((e)=>e!='default')
+	if(insertables.length>0){
+		var specialdiv = $('<div class="insertable-keys"><b>Insertables:</b> <br /></div>')
+		for (insertable of insertables) {
+			specialdiv.append(
+				'<a class="add-insertable" href="" data-insertable="' 
+				+ insertable + '" title="' 
+				+ insertable+'">['+insertable+']</a> ')
+		}
+		$('#notes').append(specialdiv)
+		var sourcetext_focused = false
+		$('.add-insertable').mousedown(function(){
+			sourcetext_focused = $('#sourcetext').is(':focus')
+			return true
+		})
+		$('.add-insertable').click(function(){
+			var sourcetext = $('#sourcetext')
+			var before_text = sourcetext.val()
+			var to_insert = $(this).data('insertable')
 			var caret_pos = sourcetext[0].selectionStart
 			if (typeof caret_pos === 'number') {
 				if (!sourcetext_focused) {
