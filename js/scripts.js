@@ -81,7 +81,6 @@ class NewLine{
 		this.type = 'NewLine'
 	}
 }
-
 class LineGroup{
 	constructor(firstLine){
 		this.firstLine=firstLine
@@ -114,31 +113,36 @@ class LineGroup{
 		if(this.getWidth()>maxwidth){
 			var x=0;
 			var out=[]
-			var first=this.firstLine
+			var currentLine = new LineGroup(this.firstLine)
 			for(var snippet of this.snippets){
 				var w=snippet.getWidth()
 				if(x+w>maxwidth){
+					//console.log('SPLITTING',snippet)
 					var parts = snippet.split(maxwidth-x)
-					for(var p of parts){
-						var lg = new LineGroup(first)
-						if(!p.isEmpty()){
-							first=false
-							lg.add(p)
-							out.push(lg)
+					//console.log('resulting parts',parts)
+					if(parts.length==1){
+						// Failed split.
+						if(!currentLine.isEmpty()){
+							out.push(currentLine)
+						}
+						currentLine = new LineGroup(false)
+						x=0
+						currentLine.add(snippet)
+					}else{
+						for(var p of parts){
+							currentLine.add(p)
+							out.push(currentLine)
+							currentLine = new LineGroup(false)
+							x=0
 						}
 					}
-					
-					// TODO: rest of snippets?
-					return out
 				}else{
+					currentLine.add(snippet)
 					x+=w
-					if(!snippet.isEmpty()){
-						var lg = new LineGroup(first)
-						lg.add(snippet)
-						out.push(snippet)
-						first=false
-					}
 				}
+			}
+			if(!currentLine.isEmpty()){
+				out.push(currentLine)
 			}
 			return out
 		}else{
@@ -199,7 +203,13 @@ class Snippet{
 		}else{
 			var before = new Snippet(this.font, this.text.slice(0,last))
 			var after = new Snippet(this.font, this.text.slice(last))
-			return [before, after]
+			var splits=[]
+			for(let snippet of [before,after]){
+				if(!snippet.isEmpty()){
+					splits.push(snippet)
+				}
+			}
+			return splits;
 		}
 	}
 
@@ -228,7 +238,9 @@ class Snippet{
 				minfo.char.h*minfo.scale
 			)
 			x=minfo.x+(minfo.char.w - minfo.char.unadvance)
-			last = minfo.char.unadvance
+			if(!char['unadvance-through-font-changes']){
+				last = minfo.char.unadvance
+			}
 			lastchar = minfo.char.char
 		}
 		return x + last
@@ -292,6 +304,7 @@ class Snippet{
 				'w': first(info.w, ligature_default.w, defaultInfo.w),
 				'h': first(info.h, ligature_default.h, defaultInfo.h),
 				'unadvance': first(lig_unadvance, ligature_default.unadvance, info.unadvance, defaultInfo.unadvance, 0),
+				'unadvance-through-font-changes': first(font['unadvance-through-font-changes'], false),
 				'unadvance-after': first(info['unadvance-after'],ligature_default['unadvance-after'], {}),
 				'vertical-shift': first(info['vertical-shift'], ligature_default['vertical-shift'], 0),
 				'char':c
@@ -331,12 +344,13 @@ class Snippet{
 }
 
 class FontManager{
-	constructor(context, text, fonts) {
+	constructor(context, text, fonts, aliases) {
 		this.context = context
 		this.text = text
 		this.fonts = fonts
+		this.aliases = aliases || {}
 		this.lines = this.applyMarkup()
-		//console.log(this.lines)
+		//console.log('FontManager Constructor:',this.lines)
 	}
 
 	subset(other_text) {
@@ -402,6 +416,9 @@ class FontManager{
 				if(marker.startsWith('/')){
 					marker='main'
 				}
+				// Apply font aliases before looking up font name
+				marker = first(this.aliases[marker], marker)
+
 				if(!(marker in this.fonts)){
 					marker='main'
 				}
@@ -437,27 +454,33 @@ class FontManager{
 		for(let [line_number, line] of this.lines.entries()){
 			var x = originx
 			var origin_override = explicit_origins ? explicit_origins[line_number] : null
+			var local_justify = line_number==0 ? first_line_justify : justify
+
 			if(origin_override){
 				// We overwrite originx as well so this'll stick for later lines
 				originx = x = first(origin_override['x'], originx)
 				y = first(origin_override['y'], y)
+				if(origin_override['justify']){
+					local_justify = origin_override['justify']
+
+				}
 			}
 			if(line_number==0){
-				if(first_line_justify == 'output-center'){
+				if(local_justify == 'output-center'){
 					x = Math.floor(output_size.w/2) - Math.floor(line.getWidth()/2);
 					x = (x - (x % justifyresolution))
 				}
-				if(first_line_justify == 'center'){
+				if(local_justify == 'center'){
 					x = x - Math.floor(line.getWidth()/2);
 					x = (x - (x % justifyresolution))
 				}
 			}
 			if(line_number!=0 || first_line_justify==justify){
-				if(['center','all-center'].includes(justify)){
+				if(['center','all-center'].includes(local_justify)){
 					var jadjust = Math.floor(line.getWidth()/2);
 					x = originx - (jadjust - (jadjust % justifyresolution));
 				}
-				if(justify=='right'){
+				if(local_justify=='right'){
 					var jadjust = line.getWidth();
 					x = originx - (jadjust - (jadjust % justifyresolution));
 				}
@@ -790,6 +813,7 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 	var overlays = parseOverlays(fontInfo)
 
 	var rawtext = document.querySelector("textarea#sourcetext").value
+	var fontAliases = first(fontInfo['font-aliases'],{})
 
 	function switchFont(newFont){
 		rawtext = '[' + newFont + ']' + rawtext
@@ -803,10 +827,10 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 		fontInfo.slope_offset=eval('['+fontInfo['slope-offset']+']')[0]
 	}
 
-	var fontManager = new FontManager(context, rawtext, fonts)
+	var fontManager = new FontManager(context, rawtext, fonts, fontAliases)
 	if('wrap-width' in fontInfo && $('#wordwrap').prop('checked')){
 		fontManager.wordwrap(fontInfo['wrap-width'])
-		//console.log(fontManager.lines)
+		//console.log('Wordwrapped: ',fontManager.lines)
 	}
 
 	if(wordwrap_dryrun){
@@ -815,7 +839,7 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 
 	var justify = first(fontInfo.justify, 'left')
 	var justify_resolution = first(fontInfo['justify-resolution'],1)
-	var first_line_justify = first(fontInfo['first-line-justify'], justify)
+	var first_line_justify = fontInfo['first-line-justify']
 
 	var explicit_origins = fontInfo['explicit-origins']
 
@@ -931,6 +955,8 @@ function renderText(scaled = true, wordwrap_dryrun=false){
 		// EVAL IS SAFE CODE, YES?
 		eval(fontInfo['hooks']['pre-text'])
 	}
+	// Delay when we evaluate if first_line_justify should be reset to justify
+	var first_line_justify = first(first_line_justify, justify)
 	fontManager.draw(mainFont, scale, originx, justify, justify_resolution, fontOriginY, first_line_justify, explicit_origins, outputSize)
 
 	drawOverlays('post-text')
